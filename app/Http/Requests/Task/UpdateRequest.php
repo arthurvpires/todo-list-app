@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Task;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdateRequest extends FormRequest
 {
@@ -25,5 +27,18 @@ class UpdateRequest extends FormRequest
             'status.string' => 'The status must be a string.',
             'status.in' => 'The status must be one of the following values: pending, in_progress, done.',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            response()->json(
+                [
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ],
+                422
+            )
+        );
     }
 }

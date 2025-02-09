@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Task;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CreateRequest extends FormRequest
 {
@@ -24,6 +26,19 @@ class CreateRequest extends FormRequest
             'description.required' => 'The description field is required.',
             'description.max' => 'The description may not be greater than 255 characters.',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            response()->json(
+                [
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ],
+                422
+            )
+        );
     }
 
 }
