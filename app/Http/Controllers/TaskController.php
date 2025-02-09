@@ -61,6 +61,11 @@ class TaskController extends Controller
     public function destroy(Request $req)
     {
         $this->taskRepository->destroy($req->id);
-        return response()->json(['message' => 'Task deleted successfully!'], Response::HTTP_OK);
+        return response()->json(
+            [
+                'message' => 'Task deleted successfully!'
+            ],
+            Response::HTTP_OK
+        );
     }
 }
