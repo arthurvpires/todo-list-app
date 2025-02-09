@@ -36,19 +36,15 @@ test('list all tasks', function () {
 });
 
 test('list task details', function () {
-    $response = $this->postJson("api/task/list/{$this->task->id}", [
-        'id' => $this->task->id,
-    ]);
 
-    $expectedResponse = [
-        'id' => $this->task->id,
-        'title' => $this->task->title,
-        'description' => $this->task->description,
-       'status' => $this->task->status,
-    ];
-
+    $response = $this->getJson("api/task/{$this->task->id}");
     $response->assertStatus(200)
-        ->assertJsonFragment($expectedResponse)
+        ->assertJsonFragment([
+            'id' => $this->task->id,
+            'title' => $this->task->title,
+            'description' => $this->task->description,
+            'status' => $this->task->status,
+        ])
         ->assertOk();
 });
 
