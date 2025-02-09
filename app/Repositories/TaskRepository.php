@@ -24,28 +24,19 @@ class TaskRepository
         return $perPage ? Task::paginate($perPage) : Task::all();
     }
 
-    public function listDetails(int $id): ?Task
+    public function getDetails(int $id): ?Task
     {
-        return Task::find($id);
+        return Task::findOrFail($id);
     }
 
     public function update(int $id, array $data): ?Task
     {
         $task = Task::find($id);
-
         if (!$task) {
             throw new \Exception('Task not found');
         }
 
-        $updateData = [
-            'title' => $data['title'],
-            'description' => $data['description'],
-        ];
-
-        if (isset($data['status'])) {
-            $updateData['status'] = $data['status'];
-        }
-
+        $updateData = array_filter($data, fn ($value) => !is_null($value));
         $task->update($updateData);
         return $task;
     }
